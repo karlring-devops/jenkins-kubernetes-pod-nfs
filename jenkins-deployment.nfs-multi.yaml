@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins-admin-sa
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        ports:
+          - name: http-port
+            containerPort: 8080
+          - name: jnlp-port
+            containerPort: 50000
+        volumeMounts:
+        - name: nfs-volume-jenkins-home
+          mountPath: /var/jenkins_home
+        - name: nfs-volume-jenkins-restore
+          mountPath: /var/jenkins_restore
+      volumes:
+        - name: nfs-volume-jenkins-home
+          nfs: 
+            # URL for the NFS server
+            server: 192.168.7.11
+            path: /home/public/var/jenkins/home
+        - name: nfs-volume-jenkins-restore
+          nfs: 
+            # URL for the NFS server
+            server: 192.168.7.11
+            path: /home/public/var/jenkins/restore

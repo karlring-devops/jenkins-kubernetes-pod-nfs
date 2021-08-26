@@ -1,7 +1,6 @@
 # jenkins-kubernetes-pod-nfs
 create a jenkins deployment with NFS filesystem
 
-## Requires  .jprofile (from my other repo)
+## Instructions 
 
-source .jprofile
-kcr8Jenkins
+copy "setup_jenkins_nfs.sh" to your Kubernetes Master node. Then execute the script to clone this repo, and install jenkins on existing Kubernetes cluster (use my vagrant-kubernetes-nfs build if you like)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+jk8snfs_setup(){
 JENKINS_HOME_LOCAL_USER=~/.jenkins
 [ ! -d ${JENKINS_HOME_LOCAL_USER} ] && mkdir -p ${JENKINS_HOME_LOCAL_USER}
   
@@ -25,7 +25,9 @@ JENKINS_HOME_LOCAL_USER=~/.jenkins
   kubectl create -f jenkins-service.yaml --validate=false
   kubectl create -f jenkins-service-jnlp.yaml
   kubectl scale -n jenkins deployment jenkins --replicas=1
+}
 
+jlogin(){
 #/--- Get Jenkins Login Details ------/
         K8S_MASTER_IP=$(kubectl get nodes -o wide | grep master | awk '{ print $6 }' ;) 
     JENKINS_NODE_PORT=$(kubectl get services --namespace jenkins | grep 'NodePort' | awk '{print $5}' | sed -e 's|\/|:|g' | awk -F':' '{print $2}' ; )
@@ -37,3 +39,24 @@ JENKINS_HOME_LOCAL_USER=~/.jenkins
     Jenkins Login URL     :    http://${K8S_MASTER_IP}:${JENKINS_NODE_PORT}
     Initial Admin Password: ${JENKINS_INIT_PASSWD}
 EOF
+}
+
+setup_nfs_master(){
+    #--- do this on the NFS Server before running -- jk8snfs_setup()
+    sudo apt update
+    sudo apt install nfs-common
+    sudo apt-get update
+    sudo apt install nfs-kernel-server
+
+    sudo mkdir -p /home/public/var/jenkins/home
+    sudo chown nobody:nogroup /home/public/var/jenkins/home
+    sudo chmod 777 /home/public/var/jenkins/home
+
+    cat <<EOF>>/etc/exports
+    /home/public/var/jenkins/home *(rw,sync,no_subtree_check)
+EOF
+
+    sudo exportfs -ra
+    sudo systemctl restart nfs-kernel-server.service
+}
+

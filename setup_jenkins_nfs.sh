@@ -8,7 +8,8 @@ JENKINS_HOME_LOCAL_USER=~/.jenkins
   
   JENKINS_GIT_DIR=jenkins-kubernetes-pod
   [ -d ${JENKINS_GIT_DIR} ] && rm -rf ${JENKINS_GIT_DIR}
-  git clone https://github.com/karlring-devops/jenkins-kubernetes-pod.git
+  #git clone https://github.com/karlring-devops/jenkins-kubernetes-pod.git
+  git clone https://github.com/karlring-devops/jenkins-kubernetes-pod-nfs.git
   cd ${JENKINS_GIT_DIR}
   
   kubectl create -f jenkins-namespace.yaml

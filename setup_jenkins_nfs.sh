@@ -6,7 +6,8 @@ JENKINS_HOME_LOCAL_USER=~/.jenkins
   
   cd ${JENKINS_HOME_LOCAL_USER}
   
-  JENKINS_GIT_DIR=jenkins-kubernetes-pod
+  #JENKINS_GIT_DIR=jenkins-kubernetes-pod
+  JENKINS_GIT_DIR=jenkins-kubernetes-pod-nfs
   [ -d ${JENKINS_GIT_DIR} ] && rm -rf ${JENKINS_GIT_DIR}
   #git clone https://github.com/karlring-devops/jenkins-kubernetes-pod.git
   git clone https://github.com/karlring-devops/jenkins-kubernetes-pod-nfs.git
